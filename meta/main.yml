@@ -1,0 +1,36 @@
+---
+galaxy_info:
+  author: Knut Ahlers
+  description: |
+    Install and configure telegraf on host
+
+  license: Apache
+  min_ansible_version: 2.3
+
+  platforms:
+  - name: Ubuntu
+    versions:
+      - xenial
+  - name: Debian
+    versions:
+      - jessie
+      - stretch
+
+  categories:
+    #- cloud
+    #- cloud:ec2
+    #- cloud:gce
+    #- cloud:rax
+    #- clustering
+    #- database
+    #- database:nosql
+    #- database:sql
+    #- development
+    - monitoring
+    #- networking
+    #- packaging
+    #- system
+    #- web
+
+dependencies:
+  - config_encoder_filters

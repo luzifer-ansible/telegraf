@@ -1,0 +1,66 @@
+---
+
+- name: Get current telegraf version
+  shell: "/usr/local/bin/telegraf version || true"
+  check_mode: no
+  register: telegraf_version_cmd
+
+- name: Download and unpack telegraf release
+  unarchive:
+    src: 'https://dl.influxdata.com/telegraf/releases/telegraf-{{ telegraf_version }}-static_linux_amd64.tar.gz'
+    remote_src: true
+    dest: /tmp
+  when: telegraf_version not in telegraf_version_cmd.stdout
+
+- name: Move telegraf to expected position
+  command: mv /tmp/telegraf/telegraf /usr/local/bin/telegraf
+  when: telegraf_version not in telegraf_version_cmd.stdout
+
+- name: Cleanup tmp folder
+  file:
+    dest: /tmp/telegraf
+    state: absent
+  when: telegraf_version not in telegraf_version_cmd.stdout
+
+- name: Install systemd service
+  copy:
+    content: |
+      [Unit]
+      Description=Telegraf monitoring
+      After=network-online.target
+      Requires=network-online.target
+
+      [Service]
+      TimeoutStartSec=0
+      TimeoutStopSec=0
+      Restart=on-failure
+      RestartSec=10
+      SyslogIdentifier=telegraf
+      ExecStart=/usr/local/bin/telegraf --config /etc/telegraf.conf
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/telegraf.service
+  register: telegraf_service
+
+- name: Enable systemd service
+  systemd:
+    name: telegraf
+    enabled: true
+    daemon_reload: true
+
+- name: Write telegraf.conf file
+  template:
+    src: templates/telegraf.conf.j2
+    dest: /etc/telegraf.conf 
+    mode: 0600
+    owner: root
+  register: telegraf_config
+
+- name: Restart systemd service
+  systemd:
+    name: telegraf
+    state: restarted
+  when: packer_build_name is not defined and (telegraf_service.changed or telegraf_config.changed)
+
+...

@@ -1,0 +1,11 @@
+---
+
+# See telegraf_agent_.* in templates/telegraf.conf.j2
+
+telegraf_global_tags: {}
+telegraf_outputs: {}
+telegraf_inputs: {}
+
+telegraf_version: "1.6.1"
+
+...
