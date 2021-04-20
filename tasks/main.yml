@@ -13,12 +13,12 @@
   when: telegraf_version not in telegraf_version_cmd.stdout
 
 - name: Move telegraf to expected position
-  command: mv /tmp/telegraf/telegraf /usr/local/bin/telegraf
+  command: 'mv /tmp/telegraf-{{ telegraf_version }}/usr/bin/telegraf /usr/local/bin/telegraf'
   when: telegraf_version not in telegraf_version_cmd.stdout
 
 - name: Cleanup tmp folder
   file:
-    dest: /tmp/telegraf
+    dest: '/tmp/telegraf-{{ telegraf_version }}'
     state: absent
   when: telegraf_version not in telegraf_version_cmd.stdout
 
