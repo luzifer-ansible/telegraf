@@ -6,6 +6,6 @@ telegraf_global_tags: {}
 telegraf_outputs: {}
 telegraf_inputs: {}
 
-telegraf_version: "1.6.1"
+telegraf_version: "1.18.1"
 
 ...

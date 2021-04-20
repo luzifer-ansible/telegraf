@@ -7,7 +7,7 @@
 
 - name: Download and unpack telegraf release
   unarchive:
-    src: 'https://dl.influxdata.com/telegraf/releases/telegraf-{{ telegraf_version }}-static_linux_amd64.tar.gz'
+    src: 'https://dl.influxdata.com/telegraf/releases/telegraf-{{ telegraf_version }}_linux_amd64.tar.gz'
     remote_src: true
     dest: /tmp
   when: telegraf_version not in telegraf_version_cmd.stdout
